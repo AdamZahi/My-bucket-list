@@ -3,8 +3,8 @@ import { ClerkProvider,} from '@clerk/nextjs'
 
 
 export const metadata = {
-  title: "Todo App",
-  description: "My todos app developed with Next.js",
+  title: "My Show Bucket List",
+  description: "Movies & TV Shows Bucket List web app developed with Next.js",
 };
 
 export default function RootLayout({ children }) {

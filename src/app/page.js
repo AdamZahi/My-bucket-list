@@ -233,7 +233,6 @@ export default function Home() {
                 <th className="px-4 py-2 text-left">Overview</th>
                 <th className="px-4 py-2 text-left">Language</th>
                 <th className="px-4 py-2 text-left">Status</th>
-                <th className="px-4 py-2 text-left">Additional Links</th>
                 <th className="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
@@ -274,20 +273,6 @@ export default function Home() {
                                 </td>
                     <td className="px-4 py-2">{item.language}</td>
                     <td className="px-4 py-2">{item.status}</td>
-                    <td className="px-4 py-2">
-                      {item.additional_links ? (
-                        <a
-                          href={item.additional_links}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          Link
-                        </a>
-                      ) : (
-                        <span className="text-gray-400">-</span>
-                      )}
-                    </td>
                     <td className="px-4 py-2 flex gap-2">
                       <button
                         onClick={() => {
