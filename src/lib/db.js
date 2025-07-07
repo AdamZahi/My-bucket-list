@@ -7,7 +7,7 @@ export async function createConnection() {
             host: 'localhost',
             user: 'root',
             password: '',
-            database: 'todo_app',
+            database: 'my_bucker_list',
     });
     }
     return connection;
