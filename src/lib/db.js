@@ -1,14 +1,10 @@
-import mysql from 'mysql2/promise';
+const { PrismaClient } = require('@prisma/client');
 
-let connection;
-export async function createConnection() {
-    if(!connection){
-        return await mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            database: 'my_bucker_list',
-    });
-    }
-    return connection;
+const prisma = globalThis.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') {
+    globalThis.prisma = prisma;
 }
+
+console.log('✅ Loaded Prisma Client');
+module.exports = prisma;

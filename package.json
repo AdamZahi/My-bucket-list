@@ -11,8 +11,10 @@
   "dependencies": {
     "@clerk/nextjs": "^6.23.3",
     "@heroui/spinner": "^2.2.19",
+    "@prisma/client": "^6.11.1",
     "mysql2": "^3.14.1",
     "next": "15.3.5",
+    "prisma": "^6.11.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

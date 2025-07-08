@@ -22,26 +22,41 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  
+
   // Fetch user's list
-  useEffect(() => {
-    if (!user) return;
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/my_list?user_id=${user.id}`);
-        const list = await res.json();
+useEffect(() => {
+  if (!user?.id) return;
+  let isMounted = true;
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/my_list?user_id=${user.id}`);
+      const list = await res.json();
+      if (isMounted) {
         if (Array.isArray(list.shows)) {
           setData(list.shows);
         } else {
           setData([]);
         }
-      } catch (error) {
-        console.error(error);
       }
-      setLoading(false);
-    };
-    fetchData();
-  }, [user]);
+    } catch (error) {
+      if (isMounted) {
+        setData([]);
+      }
+      console.error(error);
+    } finally {
+      if (isMounted) setLoading(false);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    isMounted = false;
+  };
+}, [user?.id]);
 
   const toggleOverview = (id) => {
         setExpanded(prev => ({
@@ -112,6 +127,20 @@ export default function Home() {
   const goToDetails = (id) => {
     router.push(`/my_list/${id}`);
   };
+
+  useEffect(() => {
+  if (!user) return;
+  fetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      clerkUserId: user.id,
+      email: user.emailAddresses?.[0]?.emailAddress || '',
+      name: user.fullName || '',
+      imageUrl: user.imageUrl || ''
+    })
+  });
+}, [user]);
 
   if (!user) {
   return (
@@ -314,25 +343,37 @@ export default function Home() {
       <h2 className="text-xl font-bold mb-4">Edit Show</h2>
       <form
         onSubmit={async (e) => {
-          e.preventDefault();
-          if (!user) return;
-          try {
-            const res = await fetch('/api/my_list', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ ...editForm, user_id: user.id }),
-            });
-            const result = await res.json();
-            if (result.success) {
-              setData(data.map((item) =>
-                item.id === editForm.id ? { ...editForm } : item
-              ));
-              setEditing(false);
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }}
+      e.preventDefault();
+      // Call your update API here
+      const res = await fetch(`/api/my_list/${editForm.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editForm),
+      });
+      if (res.ok) {
+        // Optionally update your local data state here
+        setEditing(false);
+        setEditForm(null);
+        // Optionally refetch data or update state
+        const fetchData = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/my_list?user_id=${user.id}`);
+    const list = await res.json();
+    if (Array.isArray(list.shows)) {
+      setData(list.shows);
+    } else {
+      setData([]);
+    }
+  } catch (error) {
+    setData([]);
+    console.error(error);
+  }
+  setLoading(false);
+};
+fetchData();
+      }
+    }}
         className="flex flex-col gap-3"
       >
         <input
