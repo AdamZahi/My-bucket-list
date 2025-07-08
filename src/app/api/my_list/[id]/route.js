@@ -1,7 +1,7 @@
 import prisma from '@/lib/db.js'; 
 
 export async function GET(req, { params }) {
-  const { id } = await params;
+  const { id } = params;
   if (!id) {
     return new Response(JSON.stringify({ error: 'Missing id' }), { status: 400 });
   }
