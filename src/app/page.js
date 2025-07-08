@@ -313,7 +313,7 @@ useEffect(() => {
                         Edit
                       </button>
                       <button
-                        // onClick={() => goToDetails(item.id)}
+                        onClick={() => goToDetails(item.id)}
                         className="px-3 py-1 rounded bg-green-500 text-white text-sm hover:bg-green-600 transition"
                       >
                         Details
